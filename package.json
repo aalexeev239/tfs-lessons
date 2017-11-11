@@ -1,5 +1,5 @@
 {
-  "name": "tfs-lessons",
+  "name": "tfs-example",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
@@ -8,6 +8,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
+    "test:ci": "ng lint && ng test --single-run",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -21,6 +22,7 @@
     "@angular/platform-browser": "^5.0.0",
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
+    "bootstrap": "^4.0.0-beta.2",
     "core-js": "^2.4.1",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.14"
