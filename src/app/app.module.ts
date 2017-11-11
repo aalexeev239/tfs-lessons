@@ -1,16 +1,25 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {LOCALE_ID, NgModule} from '@angular/core';
+import localeRu from '@angular/common/locales/ru';
+import {registerLocaleData} from '@angular/common';
+import {AppComponent} from './app.component';
+import {WalletModule} from './wallet/wallet.module';
 
-import { AppComponent } from './app.component';
+registerLocaleData(localeRu);
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    WalletModule
   ],
-  providers: [],
+  providers: [
+    {provide: LOCALE_ID, useValue: 'ru'},
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+
+export class AppModule {
+}
