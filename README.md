@@ -2,6 +2,15 @@
 
 [Урок 1](lesson1.md)
 
+ДЗ:
+1. Сделайте форк репозитория
+2. Подключите travis для этого репозитория
+3. Создайте ветку lesson-01-hw от ветки lesson-01 репозитория
+4. Исправьте приложение, чтобы все тесты проходили (npm run test). 
+5. Создайте пул-реквест из ветки lesson-01-hw в ветку lesson-01 **вашего** форка. Важно: не мержите пул-реквест самостоятельно.   
+
+P.S. тесты расположены в файлах `.spec.ts`.  
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
 
 ## Development server
