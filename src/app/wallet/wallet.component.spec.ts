@@ -59,8 +59,7 @@ describe('WalletComponent | компонент кошелька', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [WalletModule],
-      declarations: [WalletComponent]
+      imports: [WalletModule]
     })
       .compileComponents();
   }));
@@ -78,22 +77,22 @@ describe('WalletComponent | компонент кошелька', () => {
 
   describe('при инициализации компонент', () => {
     it('содержит заголовок', () => {
-      expect(page.title).not.toBeNull();
+      expect(page.title !== null).toBeTruthy();
       expect(page.text(page.title)).toBe('Мой первый кошелек');
     });
 
     it('содержит подзаголовок', () => {
-      expect(page.subtitle).not.toBeNull();
+      expect(page.subtitle !== null).toBeTruthy();
       expect(page.text(page.subtitle)).toBe('Ваши расходы за последнюю неделю');
     });
 
     it('содержит кнопку "Добавить"', () => {
-      expect(page.togglePurchaseBtn).not.toBeNull();
+      expect(page.togglePurchaseBtn !== null).toBeTruthy();
       expect(page.text(page.togglePurchaseBtn)).toBe('Добавить');
     });
 
     it('блок добавления покупки скрыт', () => {
-      expect(page.newPurchaseForm).toBeNull();
+      expect(page.newPurchaseForm === null).toBeTruthy();
     });
 
     describe('клик на "Добавить"', () => {
@@ -107,7 +106,7 @@ describe('WalletComponent | компонент кошелька', () => {
       });
 
       it('показывает блок добавления покупки', () => {
-        expect(page.newPurchaseForm).not.toBeNull();
+        expect(page.newPurchaseForm !== null).toBeTruthy();
       });
 
       describe('второй клик на кнопку', () => {
@@ -121,7 +120,7 @@ describe('WalletComponent | компонент кошелька', () => {
         });
 
         it('скрывает блок добавления покупки', () => {
-          expect(page.newPurchaseForm).toBeNull();
+          expect(page.newPurchaseForm === null).toBeTruthy();
         });
       });
     });
@@ -147,24 +146,24 @@ describe('WalletComponent | компонент кошелька', () => {
       component.purchases = [];
       fixture.detectChanges();
 
-      expect(page.getPurchasePreview(0)).toBeNull();
+      expect(page.getPurchasePreview(0) === null).toBeTruthy();
     });
 
     it('отрисовывает один элемент', () => {
       component.purchases = [purchasesMock[0]];
       fixture.detectChanges();
 
-      expect(page.getPurchasePreview(0)).not.toBeNull('1-й элемент не отображен');
-      expect(page.getPurchasePreview(1)).toBeNull('отображено более 1 элемента');
+      expect(page.getPurchasePreview(0) !== null).toBeTruthy('1-й элемент не отображен');
+      expect(page.getPurchasePreview(1) === null).toBeTruthy('отображено более 1 элемента');
     });
 
     it('отрисовывает два элемента', () => {
       component.purchases = [purchasesMock[0], purchasesMock[1]];
       fixture.detectChanges();
 
-      expect(page.getPurchasePreview(0)).not.toBeNull('1-й элемент не отображен');
-      expect(page.getPurchasePreview(1)).not.toBeNull('2-й элемент не отображен');
-      expect(page.getPurchasePreview(2)).toBeNull('отображено более 2 элементов');
+      expect(page.getPurchasePreview(0) !== null).toBeTruthy('1-й элемент не отображен');
+      expect(page.getPurchasePreview(1) !== null).toBeTruthy('2-й элемент не отображен');
+      expect(page.getPurchasePreview(2) === null).toBeTruthy('отображено более 2 элементов');
     });
   });
 
@@ -193,7 +192,7 @@ describe('WalletComponent | компонент кошелька', () => {
     });
 
     it('скрывает форму добавления', () => {
-      expect(page.newPurchaseForm).toBeNull();
+      expect(page.newPurchaseForm === null).toBeTruthy();
     });
   });
 });
