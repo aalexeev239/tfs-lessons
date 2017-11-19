@@ -14,7 +14,6 @@ export class WalletComponent implements OnInit {
   private currentOpen: number;
 
   constructor() {
-    this.toggleAdd();
   }
 
   ngOnInit() {

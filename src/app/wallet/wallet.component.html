@@ -11,7 +11,7 @@
               [class.btn-primary]="!isAddPurchaseOpen"
               [class.btn-danger]="isAddPurchaseOpen"
               (click)="toggleAdd()">
-        Добавить
+        {{isAddPurchaseOpen ? 'Отменить' : 'Добавить'}}
       </button>
     </div>
   </div>
@@ -20,10 +20,8 @@
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item" *ngFor="let purchase of purchases; let i = index">
-      <tfs-purchase-preview [attr.automation-id]="'purchase-preview-' + i"
-                            [purchase]="purchase"
-                            [isOpen]="isCurrentOpen(i)"
-                            (previewClick)="onPreviewClick(i)"></tfs-purchase-preview>
+      <tfs-purchase-preview [attr.automation-id]="'purchase-preview-' + i" [purchase]="purchase"
+                            [isOpen]="isCurrentOpen(i)" (previewClick)="onPreviewClick(i)"></tfs-purchase-preview>
     </li>
   </ul>
   <div class="card-footer text-center" automation-id="total">
