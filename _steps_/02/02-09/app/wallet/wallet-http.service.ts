@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 import {Purchase} from '../model/purchase';
 
-const BASE_URL = 'https://tfs-wallets.firebaseio.com';
+const BASE_URL = 'https://qwerty.firebaseio.com';
 
 @Injectable()
 export class WalletHttpService {

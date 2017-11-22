@@ -6,6 +6,7 @@ import {PageObject} from '../../../utils/pageObject';
 import {DebugElement} from '@angular/core';
 import {Purchase} from '../../model/purchase';
 import {AbstractControl} from '@angular/forms';
+import {getPurchaseMock} from '../../model/purchase.mock';
 
 describe('AddPurchaseComponent | форма добавления покупки', () => {
   class Page extends PageObject<AddPurchaseComponent> {
@@ -57,61 +58,98 @@ describe('AddPurchaseComponent | форма добавления покупки'
     fixture = TestBed.createComponent(AddPurchaseComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
-    fixture.detectChanges();
   });
 
   it('создается', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('инициалищация', () => {
-    describe('в модель', () => {
+  describe('инициализация', () => {
+    describe('если не передан purchase', () => {
+      beforeEach(() => {
+        fixture.detectChanges();
+      });
+
       it('пустой title', () => {
         expect(component.form.value.title).toBe('');
+        expect(page.inputText(page.titleControl)).toBe('');
       });
       it('пустой price', () => {
         expect(component.form.value.price).toBe('');
+        expect(page.inputText(page.priceControl)).toBe('');
       });
       it('пустой date', () => {
         expect(component.form.value.date).toBe('');
+        expect(page.inputText(page.titleControl)).toBe('');
       });
       it('пустой comment', () => {
         expect(component.form.value.comment).toBe('');
+        expect(page.inputText(page.titleControl)).toBe('');
       });
     });
 
-    describe('значение в поле', () => {
-      it('title пусто', () => {
-        expect(page.inputText(page.titleControl)).toBe('');
+    describe('если передан purchase', () => {
+      let purchaseMock: Purchase;
+
+      beforeEach(() => {
+        purchaseMock = getPurchaseMock();
       });
 
-      it('price пусто', () => {
-        expect(page.inputText(page.priceControl)).toBe('');
+      it('заполняет title значением из purchase', () => {
+        purchaseMock.title = 'foo';
+        component.purchase = purchaseMock;
+        fixture.detectChanges();
+
+        expect(component.form.value.title).toBe('foo');
+        expect(page.inputText(page.titleControl)).toBe('foo');
       });
 
-      it('date пусто', () => {
-        expect(page.inputText(page.titleControl)).toBe('');
+      it('заполняет price значением из purchase', () => {
+        purchaseMock.price = 100;
+        component.purchase = purchaseMock;
+        fixture.detectChanges();
+
+        expect(component.form.value.price).toBe(100);
+        expect(page.inputText(page.priceControl)).toBe('100');
       });
 
-      it('comment пусто', () => {
-        expect(page.inputText(page.titleControl)).toBe('');
+      it('заполняет date значением из purchase', () => {
+        purchaseMock.date = '2017-11-17T18:19:20.345Z';
+        component.purchase = purchaseMock;
+        fixture.detectChanges();
+
+        expect(component.form.value.date).toBe('2017-11-17');
+        expect(page.inputText(page.dateControl)).toBe('2017-11-17');
+      });
+
+      it('заполняет comment значением из purchase', () => {
+        purchaseMock.comment = 'foo';
+        component.purchase = purchaseMock;
+        fixture.detectChanges();
+
+        expect(component.form.value.comment).toBe('foo');
+        expect(page.inputText(page.commentControl)).toBe('foo');
       });
     });
 
     describe('ошибки', () => {
       it('существует блок ошибки для title', () => {
-        expect(page.titleError).not.toBeNull();
+        expect(page.titleError !== null).toBeTruthy();
         expect(page.verifyErrorElement(page.titleError)).toBe(true);
       });
 
       it('существует блок ошибки для price', () => {
-        expect(page.priceError).not.toBeNull();
+        expect(page.priceError !== null).toBeTruthy();
         expect(page.verifyErrorElement(page.priceError)).toBe(true);
       });
     });
   });
 
   describe('заполнение формы', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
+    });
+
     describe('поле title', () => {
       let field: AbstractControl;
 
@@ -401,18 +439,18 @@ describe('AddPurchaseComponent | форма добавления покупки'
         });
 
         describe('дата', () => {
-          it('передается 11.10.2017', () => {
-            component.form.patchValue({date: '11.10.2017'});
+          it('передается 2017-10-15', () => {
+            component.form.patchValue({date: '2017-10-15'});
             component.onSubmit();
 
-            expect(result.date.valueOf()).toBe(new Date('11.10.2017').valueOf());
+            expect(new Date(result.date).valueOf()).toBe(new Date('2017-10-15').valueOf());
           });
 
-          it('если не задана, передается время "сейчас"', () => {
+          it('если не задана, передается время "сейчас" в формате ISO', () => {
             component.form.patchValue({date: ''});
             component.onSubmit();
 
-            expect(result.date.valueOf()).toBe(new Date().valueOf());
+            expect(new Date(result.date).getTime() - Date.now() < 1000).toBe(true);
           });
         });
       });

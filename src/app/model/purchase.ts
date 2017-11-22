@@ -1,6 +1,7 @@
 export interface Purchase {
+  id?: string;
   title: string;
   price: number;
-  date: Date;
+  date: string;
   comment?: string;
 }

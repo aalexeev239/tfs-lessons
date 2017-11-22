@@ -4,6 +4,8 @@ import localeRu from '@angular/common/locales/ru';
 import {registerLocaleData} from '@angular/common';
 import {AppComponent} from './app.component';
 import {WalletModule} from './wallet/wallet.module';
+import {WalletListModule} from './wallet-list/wallet-list.module';
+import {HttpClientModule} from '@angular/common/http';
 
 registerLocaleData(localeRu);
 
@@ -13,7 +15,9 @@ registerLocaleData(localeRu);
   ],
   imports: [
     BrowserModule,
-    WalletModule
+    HttpClientModule,
+    WalletModule,
+    WalletListModule
   ],
   providers: [
     {provide: LOCALE_ID, useValue: 'ru'},

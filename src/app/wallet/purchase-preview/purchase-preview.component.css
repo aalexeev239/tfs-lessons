@@ -1,9 +1,22 @@
+:host {
+  display: block;
+}
+
+:host:hover .delete-btn {
+  right: -10px;
+}
+
+:host:hover .preview-title {
+  padding-right: 20px;
+}
+
 .preview-body {
   margin-top: 15px;
 }
 
 .details {
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .details td {
@@ -17,5 +30,22 @@
 
 .preview-title {
   cursor: pointer;
+  padding-right: 0;
+  position: relative;
+  transition: padding .2s;
 }
 
+.delete-btn {
+  position: absolute;
+  right: -40px;
+  transition: all .2s;
+  opacity: .5;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+}
+
+.delete-btn:active {
+  opacity: .7;
+}

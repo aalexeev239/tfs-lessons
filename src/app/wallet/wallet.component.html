@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header" automation-id="title">
-    Мой первый кошелек
+    {{wallet.name}}
   </div>
   <div class="card-body">
     <div class="d-flex justify-content-between align-items-center">
@@ -20,11 +20,16 @@
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item" *ngFor="let purchase of purchases; let i = index">
-      <tfs-purchase-preview [attr.automation-id]="'purchase-preview-' + i" [purchase]="purchase"
-                            [isOpen]="isCurrentOpen(i)" (previewClick)="onPreviewClick(i)"></tfs-purchase-preview>
+      <tfs-purchase-preview [attr.automation-id]="'purchase-preview-' + i"
+                            [purchase]="purchase"
+                            [isOpen]="isCurrentOpen(i)"
+                            (previewClick)="onPreviewClick(i)"
+                            (previewDelete)="onPreviewDelete(purchase)"></tfs-purchase-preview>
     </li>
   </ul>
-  <div class="card-footer text-center" automation-id="total">
-    Итого: <strong>{{total | currency:'RUB':''}}</strong>
+  <div class="card-footer text-center"
+       [class.text-danger]="balance < 0"
+       automation-id="total">
+    Баланс: <strong>{{balance | currency:'RUB':''}}</strong>
   </div>
 </div>

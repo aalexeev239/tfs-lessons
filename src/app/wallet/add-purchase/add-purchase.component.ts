@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Purchase} from '../../model/purchase';
 
@@ -12,6 +12,7 @@ const digitRegex = /^\d*\.?\d+$/;
 export class AddPurchaseComponent implements OnInit {
   form: FormGroup;
   @Output() addPurchase = new EventEmitter<Purchase>();
+  @Input() purchase: Purchase;
 
   constructor(private formBuilder: FormBuilder) {
   }
@@ -58,12 +59,14 @@ export class AddPurchaseComponent implements OnInit {
       return;
     }
 
-    const date = this.form.value.date ? new Date(this.form.value.date) : new Date();
+    const date = this.form.value.date
+      ? new Date(this.form.value.date)
+      : new Date();
 
     const purchase: Purchase = {
       title: this.form.value.title,
       price: Math.floor(price * 100) / 100,
-      date
+      date: date.toISOString()
     };
 
     if (this.form.value.comment) {

@@ -1,6 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Purchase} from '../../model/purchase';
-import {currencyCode} from '../../constants/currency.const';
 
 @Component({
   selector: 'tfs-purchase-preview',
@@ -11,8 +10,8 @@ export class PurchasePreviewComponent implements OnInit {
   @Input() purchase: Purchase;
   @Input() isOpen: boolean;
   @Output() previewClick = new EventEmitter();
-
-  currencyCode = currencyCode;
+  @Output() previewDelete = new EventEmitter();
+  @Output() edit = new EventEmitter<Purchase>();
 
   constructor() {
   }
@@ -22,5 +21,17 @@ export class PurchasePreviewComponent implements OnInit {
 
   onClick() {
     this.previewClick.emit();
+  }
+
+  onDeleteClick(event: MouseEvent) {
+    event.stopPropagation();
+
+    this.previewDelete.emit();
+  }
+
+  onEditPurchase() {
+  }
+
+  toggleEdit() {
   }
 }
