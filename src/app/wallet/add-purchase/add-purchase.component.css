@@ -2,4 +2,11 @@
   border-color: #dc3545;
 }
 
-/* http://getbootstrap.com/docs/4.0/components/forms/#server-side подскажет, что делать*/
+.invalid-feedback {
+  /* http://getbootstrap.com/docs/4.0/components/forms/#server-side подскажет, что делать*/
+  display: none;
+}
+
+.form-control.ng-invalid.ng-touched ~ .invalid-feedback {
+  display: block;
+}
