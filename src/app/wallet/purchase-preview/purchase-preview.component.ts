@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Purchase} from '../../model/purchase';
 
 @Component({
@@ -6,17 +6,22 @@ import {Purchase} from '../../model/purchase';
   templateUrl: './purchase-preview.component.html',
   styleUrls: ['./purchase-preview.component.css']
 })
-export class PurchasePreviewComponent implements OnInit {
+export class PurchasePreviewComponent implements OnInit, OnChanges {
   @Input() purchase: Purchase;
   @Input() isOpen: boolean;
   @Output() previewClick = new EventEmitter();
   @Output() previewDelete = new EventEmitter();
   @Output() edit = new EventEmitter<Purchase>();
+  isEdit;
 
   constructor() {
   }
 
   ngOnInit() {
+  }
+
+  ngOnChanges() {
+    
   }
 
   onClick() {

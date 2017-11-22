@@ -51,6 +51,7 @@ export class WalletHttpService {
     );
   }
 
-  updatePurchase(purchase: Purchase) {
+  updatePurchase(x: any) {
+    return Observable.of();
   }
 }
