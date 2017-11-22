@@ -412,7 +412,7 @@ describe('AddPurchaseComponent | форма добавления покупки'
             component.form.patchValue({date: ''});
             component.onSubmit();
 
-            expect(result.date.valueOf()).toBe(new Date().valueOf());
+            expect((result.date.getTime() - Date.now()) < 1000).toBe(true);
           });
         });
       });
