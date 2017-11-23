@@ -9,6 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "test:ci": "ng lint && ng test --single-run",
     "populate-db": "./node_modules/.bin/ts-node ./src/utils/populate-db.ts"
   },
   "private": true,
