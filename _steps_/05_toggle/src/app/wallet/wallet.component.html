@@ -1,0 +1,26 @@
+<div class="card">
+  <div class="card-header">
+    Мой первый кошелек
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center">
+      <p class="card-text m-0">Ваши расходы за последнюю неделю</p>
+      <button type="button"
+              class="btn btn-primary">
+        Добавить
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <tfs-add-purchase></tfs-add-purchase>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item" *ngFor="let purchase of purchases">
+      <tfs-purchase-preview [purchase]="purchase"
+      ></tfs-purchase-preview>
+    </li>
+  </ul>
+  <div class="card-footer text-center">
+    Итого: <strong>{{total | currency:'RUB':''}}</strong>
+  </div>
+</div>

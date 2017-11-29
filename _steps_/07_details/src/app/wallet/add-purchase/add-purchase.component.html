@@ -1,0 +1,23 @@
+<form [formGroup]="form" (submit)="onSubmit()">
+  <div class="form-group">
+    <input formControlName="title"
+           type="text"
+           class="form-control"
+           placeholder="Название">
+  </div>
+  <div class="form-group">
+    <input formControlName="price"
+           type="text"
+           class="form-control"
+           placeholder="Стоимость">
+  </div>
+  <div class="form-group">
+    <button type="submit"
+            [disabled]="form.pristine || form.invalid"
+            class="btn btn-success btn-block">
+      Готово
+    </button>
+  </div>
+</form>
+
+{{form.get('title').errors | json}}
