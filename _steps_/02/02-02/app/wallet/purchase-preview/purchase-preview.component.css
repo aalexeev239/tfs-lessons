@@ -1,0 +1,21 @@
+.preview-body {
+  margin-top: 15px;
+}
+
+.details {
+  width: 100%;
+}
+
+.details td {
+  text-align: right;
+}
+
+.details th,
+.details td {
+  vertical-align: top;
+}
+
+.preview-title {
+  cursor: pointer;
+}
+
