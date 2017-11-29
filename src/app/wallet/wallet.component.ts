@@ -3,6 +3,11 @@ import {Purchase} from '../model/purchase';
 import {WalletService} from './wallet.service';
 import {Wallet} from '../model/wallet';
 import {WalletHttpService} from './wallet-http.service';
+import {AngularFireDatabase} from 'angularfire2/database';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/operator/startWith';
+import {PurchasesService} from './purchases.service';
 
 @Component({
   selector: 'tfs-wallet',
@@ -20,7 +25,7 @@ export class WalletComponent implements OnInit {
   private currentOpen: number;
 
   constructor(private walletService: WalletService,
-              private walletHttpService: WalletHttpService) {
+              private purchasesService: PurchasesService) {
   }
 
   get balance(): number {
@@ -28,15 +33,15 @@ export class WalletComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadPurchases();
+    this.purchasesService.getPurchasesForWallet(this.wallet.id)
+      .subscribe((purchases) => {
+        this.setPurchasesAsync(purchases);
+      });
   }
 
   onAddPurchase(newPurchase: Purchase) {
-    this.walletHttpService.addPurchase(this.wallet.id, newPurchase)
-      .subscribe((id) => {
-        const resultPurchase = Object.assign({}, newPurchase, {id});
-
-        this.setPurchasesAsync([...this.purchases, resultPurchase]);
+    this.purchasesService.addPurchase(newPurchase, this.wallet.id)
+      .subscribe((val) => {
         this.toggleAdd();
       });
   }
@@ -55,28 +60,16 @@ export class WalletComponent implements OnInit {
   }
 
   onPreviewDelete({id}: Purchase) {
-    this.walletHttpService.deletePurchase(this.wallet.id, id)
-      .subscribe(() => {
-        this.loadPurchases();
-      });
+    this.purchasesService.deletePurchase(id, this.wallet.id)
+      .subscribe();
   }
 
   onPurchaseEdit(purchase: Purchase) {
-    this.walletHttpService.updatePurchase(purchase)
-      .subscribe(() => {
-        this.loadPurchases();
-      });
+    this.purchasesService.editPurchase(purchase);
   }
 
   isCurrentOpen(index: number): boolean {
     return this.currentOpen === index;
-  }
-
-  private loadPurchases() {
-    this.walletHttpService.getPurchases(this.wallet.id)
-      .subscribe((purchases) => {
-        this.setPurchasesAsync(purchases);
-      });
   }
 
   private setPurchasesAsync(purchases: Purchase[]) {

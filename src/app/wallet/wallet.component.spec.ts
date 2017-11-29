@@ -5,10 +5,10 @@ import {WalletModule} from './wallet.module';
 import {PageObject} from '../../utils/pageObject';
 import {DebugElement} from '@angular/core';
 import {Purchase} from '../model/purchase';
-import {WalletHttpService} from './wallet-http.service';
 import createSpyObj = jasmine.createSpyObj;
 import {Observable} from 'rxjs/Observable';
 import {getPurchaseMock} from '../model/purchase.mock';
+import {PurchasesService} from './purchases.service';
 
 const walletMock = {
   id: 'foo',
@@ -69,16 +69,16 @@ describe('WalletComponent | компонент кошелька', () => {
   let component: WalletComponent;
   let fixture: ComponentFixture<WalletComponent>;
   let page: Page;
-  let walletHttpServiceSpy: any;
+  let purchasesServiceSpy: any;
 
   beforeEach(async(() => {
-    walletHttpServiceSpy = createSpyObj('WalletHttpService', ['getPurchases', 'addPurchase', 'deletePurchase', 'updatePurchase']);
+    purchasesServiceSpy = createSpyObj('PurchasesService', ['getPurchasesForWallet', 'addPurchase', 'deletePurchase', 'editPurchase']);
     TestBed.configureTestingModule({
       imports: [WalletModule],
       providers: [
         {
-          provide: WalletHttpService,
-          useValue: walletHttpServiceSpy
+          provide: PurchasesService,
+          useValue: purchasesServiceSpy
         }
       ]
     })
@@ -90,7 +90,7 @@ describe('WalletComponent | компонент кошелька', () => {
     component = fixture.componentInstance;
     component.wallet = Object.assign({}, walletMock);
     page = new Page(fixture);
-    walletHttpServiceSpy.getPurchases.and.returnValue(Observable.of(purchasesMock));
+    purchasesServiceSpy.getPurchasesForWallet.and.returnValue(Observable.of(purchasesMock));
     fixture.detectChanges();
   });
 
@@ -150,11 +150,11 @@ describe('WalletComponent | компонент кошелька', () => {
 
     describe('загружает список покупок', () => {
       it('вызывает метод сервиса получения покупок', () => {
-        expect(walletHttpServiceSpy.getPurchases).toHaveBeenCalled();
+        expect(purchasesServiceSpy.getPurchasesForWallet).toHaveBeenCalled();
       });
 
       it('передает в метод сервиса id кошелька', () => {
-        expect(walletHttpServiceSpy.getPurchases).toHaveBeenCalledWith('foo');
+        expect(purchasesServiceSpy.getPurchasesForWallet).toHaveBeenCalledWith('foo');
       });
 
       it('устанавливает покупки в обратном хронологическом порядке', () => {
@@ -209,7 +209,7 @@ describe('WalletComponent | компонент кошелька', () => {
 
   describe('onAddPurchase | добавление элемента', () => {
     beforeEach(() => {
-      walletHttpServiceSpy.addPurchase.and.returnValue(Observable.of('4'));
+      purchasesServiceSpy.addPurchase.and.returnValue(Observable.of('4'));
       page.click(page.togglePurchaseBtn);
       fixture.detectChanges();
       component.onAddPurchase({
@@ -222,17 +222,17 @@ describe('WalletComponent | компонент кошелька', () => {
     });
 
     it('вызывает метод добавления', () => {
-      expect(walletHttpServiceSpy.addPurchase).toHaveBeenCalled();
+      expect(purchasesServiceSpy.addPurchase).toHaveBeenCalled();
     });
 
     it('передает в метод id кошелька', () => {
-      const [id] = walletHttpServiceSpy.addPurchase.calls.mostRecent().args;
+      const [, id] = purchasesServiceSpy.addPurchase.calls.mostRecent().args;
 
       expect(id).toBe(walletMock.id);
     });
 
     it('передает в метод покупку', () => {
-      const [, purchase] = walletHttpServiceSpy.addPurchase.calls.mostRecent().args;
+      const [purchase] = purchasesServiceSpy.addPurchase.calls.mostRecent().args;
 
       expect(purchase).toEqual({
         id: 'должен быть перезаписан',
@@ -240,19 +240,6 @@ describe('WalletComponent | компонент кошелька', () => {
         price: 100,
         date: '2017-10-03'
       });
-    });
-
-    it('добавляет элемент в начало списка', () => {
-      expect(component.purchases[0]).toEqual({
-        id: '4',
-        title: 'foo',
-        price: 100,
-        date: '2017-10-03'
-      });
-    });
-
-    it('пересчитывает общую сумму', () => {
-      expect(component.total).toBe(purchasesMockTotal + 100);
     });
 
     it('скрывает форму добавления', () => {
@@ -266,51 +253,51 @@ describe('WalletComponent | компонент кошелька', () => {
     beforeEach(() => {
       purchaseMock = getPurchaseMock();
       purchaseMock.id = 'bar';
-      walletHttpServiceSpy.getPurchases.calls.reset();
-      walletHttpServiceSpy.deletePurchase.and.returnValue(Observable.of(null));
+      purchasesServiceSpy.getPurchasesForWallet.calls.reset();
+      purchasesServiceSpy.deletePurchase.and.returnValue(Observable.of(null));
       component.onPreviewDelete(purchaseMock);
     });
 
     it('вызывает метод удаления', () => {
-      expect(walletHttpServiceSpy.deletePurchase).toHaveBeenCalled();
+      expect(purchasesServiceSpy.deletePurchase).toHaveBeenCalled();
     });
 
     it('передает в метод удаления id кошелька', () => {
-      const [id] = walletHttpServiceSpy.deletePurchase.calls.mostRecent().args;
+      const [, id] = purchasesServiceSpy.deletePurchase.calls.mostRecent().args;
 
       expect(id).toBe(walletMock.id);
     });
 
     it('передает в метод удаления id покупки', () => {
-      const [, id] = walletHttpServiceSpy.deletePurchase.calls.mostRecent().args;
+      const [id] = purchasesServiceSpy.deletePurchase.calls.mostRecent().args;
 
       expect(id).toBe('bar');
     });
 
-    it('вызывает метод загрузки всех покупок', () => {
-      expect(walletHttpServiceSpy.getPurchases).toHaveBeenCalledTimes(1);
+    it('не вызывает метод загрузки всех покупок', () => {
+      expect(purchasesServiceSpy.getPurchasesForWallet).not.toHaveBeenCalledTimes(1);
     });
   });
 
   describe('onPurchaseEdit', () => {
     beforeEach(() => {
-      walletHttpServiceSpy.updatePurchase.and.returnValue(Observable.of(null));
-      walletHttpServiceSpy.getPurchases.calls.reset();
+      purchasesServiceSpy.editPurchase.and.returnValue(Observable.of(null));
+      purchasesServiceSpy.getPurchasesForWallet.calls.reset();
       component.onPurchaseEdit(getPurchaseMock());
     });
 
     it('вызывает метод обновления', () => {
-      expect(walletHttpServiceSpy.updatePurchase).toHaveBeenCalled();
+      expect(purchasesServiceSpy.editPurchase).toHaveBeenCalled();
     });
 
     it('передает в метод обновления покупкy', () => {
-      const [purchase] = walletHttpServiceSpy.updatePurchase.calls.mostRecent().args;
+      const [purchase] = purchasesServiceSpy.editPurchase.calls.mostRecent().args;
 
       expect(purchase).toEqual(getPurchaseMock());
     });
 
-    it('вызывает метод загрузки всех покупок', () => {
-      expect(walletHttpServiceSpy.getPurchases).toHaveBeenCalledTimes(1);
+    it('не вызывает метод загрузки всех покупок', () => {
+      expect(purchasesServiceSpy.getPurchasesForWallet).not.toHaveBeenCalledTimes(1);
     });
   });
 });

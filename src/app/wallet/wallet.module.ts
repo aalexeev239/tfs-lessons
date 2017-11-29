@@ -4,6 +4,7 @@ import {WalletComponent} from './wallet.component';
 import {PurchasePreviewComponent} from './purchase-preview/purchase-preview.component';
 import {AddPurchaseModule} from './add-purchase/add-purchase.module';
 import {WalletHttpService} from './wallet-http.service';
+import {PurchasesService} from './purchases.service';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import {WalletHttpService} from './wallet-http.service';
   declarations: [WalletComponent, PurchasePreviewComponent],
   exports: [WalletComponent],
   providers: [
-    WalletHttpService
+    WalletHttpService,
+    PurchasesService
   ]
 })
 export class WalletModule {

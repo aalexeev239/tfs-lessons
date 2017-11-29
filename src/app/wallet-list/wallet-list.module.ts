@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {WalletListComponent} from './wallet-list.component';
 import {WalletModule} from '../wallet/wallet.module';
 import {WalletListService} from './wallet-list.service';
+import {WalletFireService} from './wallet-fire.service';
 
 @NgModule({
   imports: [
@@ -11,7 +12,7 @@ import {WalletListService} from './wallet-list.service';
   ],
   declarations: [WalletListComponent],
   exports: [WalletListComponent],
-  providers: [WalletListService]
+  providers: [WalletListService, WalletFireService]
 })
 export class WalletListModule {
 }
