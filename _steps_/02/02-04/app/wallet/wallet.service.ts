@@ -1,0 +1,56 @@
+import {Injectable} from '@angular/core';
+import {Purchase} from '../model/purchase';
+import {CalcedPurchases} from '../model/calced-purchases';
+
+@Injectable()
+export class WalletService {
+  private purchases: Purchase[] = [];
+  private isInited = false;
+
+  constructor() {
+  }
+
+  addPurchase(newPurchase: Purchase) {
+    this.purchases.unshift(newPurchase);
+  }
+
+  deletePurchase(index: number) {
+    this.purchases.splice(index, 1);
+  }
+
+  getPurchases(): CalcedPurchases {
+    if (!this.isInited) {
+      this.isInited = true;
+      this.purchases = this.getData();
+    }
+
+    return {
+      purchases: this.purchases,
+      total: this.getTotal()
+    };
+  }
+
+  private getData(): Purchase[] {
+    return [
+      {
+        title: 'Проезд на метро',
+        price: 1700,
+        date: new Date(2017, 10, 3)
+      },
+      {
+        title: 'IPhone X 256gb',
+        price: 91990,
+        date: new Date(2017, 10, 3)
+      },
+      {
+        title: 'Лапша "Доширак"',
+        price: 40,
+        date: new Date(2017, 10, 3)
+      }
+    ];
+  }
+
+  private getTotal(): number {
+    return this.purchases.reduce((total, {price}) => total += price, 0);
+  }
+}
