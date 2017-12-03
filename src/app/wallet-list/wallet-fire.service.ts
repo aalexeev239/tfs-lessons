@@ -4,11 +4,11 @@ import {Observable} from 'rxjs/Observable';
 import {Wallet} from '../model/wallet';
 import 'rxjs/add/operator/map';
 import {AuthService} from '../auth.service';
-import {AngularFireList} from 'angularfire2/database/interfaces';
+import {AngularFireList, AngularFireObject} from 'angularfire2/database/interfaces';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class WalletFireService {
-
   constructor(private db: AngularFireDatabase,
               private authService: AuthService) {
   }
@@ -27,10 +27,10 @@ export class WalletFireService {
       });
   }
 
-  getWallet(id: string): Observable<Wallet> {
-    return this.db.object<Wallet>(`wallets/${id}`)
-      .valueChanges()
-      .map((wallet) => wallet ? {...wallet, id} : wallet);
+  getWallet(walletId: string): Observable<Wallet> {
+    return this.getWalletObject(walletId)
+      .switchMap((walletObject) => walletObject.valueChanges())
+      .map((wallet) => wallet ? {...wallet, id: walletId} : wallet);
   }
 
   addWallet(): Observable<void> {
@@ -44,8 +44,19 @@ export class WalletFireService {
       }));
   }
 
+  updateWallet(wallet: Wallet): Observable<void> {
+    return this.getWalletObject(wallet.id)
+      .switchMap(object => object.update(wallet));
+  }
+
   private getWalletList(id: string): AngularFireList<Wallet> {
     return this.db.list(`users/${id}/wallets`);
+  }
+
+  private getWalletObject(walletId: string): Observable<AngularFireObject<Wallet>> {
+    return this.getUserId()
+      .filter(uid => !!uid)
+      .map((uid) => this.db.object(`users/${uid}/wallets/${walletId}`));
   }
 
   private getUserId(): Observable<string> {

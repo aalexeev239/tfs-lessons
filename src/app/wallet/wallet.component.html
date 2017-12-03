@@ -1,5 +1,9 @@
 <div class="card" *ngIf="wallet">
-  <div class="card-header" automation-id="title">
+  <div class="card-header editable-title"
+       automation-id="title"
+       contenteditable="true"
+       #title
+       (input)="changeTitle(title.textContent)">
     {{wallet.name}}
   </div>
   <div class="card-body">

@@ -9,6 +9,9 @@ import 'rxjs/add/operator/switchMap';
 import {PurchasesService} from './purchases.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WalletFireService} from '../wallet-list/wallet-fire.service';
+import {Subject} from 'rxjs/Subject';
+import 'rxjs/add/operator/debounceTime';
+
 
 @Component({
   selector: 'tfs-wallet',
@@ -24,6 +27,7 @@ export class WalletComponent implements OnInit {
   isAddPurchaseOpen = false;
 
   private currentOpen: number;
+  private updateNameSubj = new Subject<string>();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -37,6 +41,8 @@ export class WalletComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setUpNameChanges();
+
     if (this.wallet) {
       this.setPurchases();
       return;
@@ -88,6 +94,10 @@ export class WalletComponent implements OnInit {
     return this.currentOpen === index;
   }
 
+  changeTitle(title) {
+    this.updateNameSubj.next(title);
+  }
+
   private setPurchases() {
     this.purchasesService.getPurchasesForWallet(this.wallet.id)
       .subscribe((purchases) => {
@@ -98,5 +108,18 @@ export class WalletComponent implements OnInit {
   private setPurchasesAsync(purchases: Purchase[]) {
     this.purchases = purchases.slice(0).reverse();
     this.total = this.walletService.getTotal(this.purchases);
+  }
+
+  private setUpNameChanges() {
+    this.updateNameSubj
+      .map(name => name.trim())
+      .map(name => name.length <= 20 ? name : name.substr(0, 20))
+      .filter(name => !!name)
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .switchMap((name) => this.walletFire.updateWallet({...this.wallet, name}))
+      .subscribe((res) => {
+        console.log('--- res', res);
+      });
   }
 }
