@@ -9,12 +9,18 @@ import {HttpClientModule} from '@angular/common/http';
 import {AngularFireModule} from 'angularfire2';
 import {environment} from '../environments/environment';
 import {AngularFireDatabaseModule} from 'angularfire2/database';
+import {RouterModule} from '@angular/router';
+import {appRoutes} from './app.routing';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { IntroComponent } from './intro/intro.component';
 
 registerLocaleData(localeRu);
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SidebarComponent,
+    IntroComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +28,8 @@ registerLocaleData(localeRu);
     WalletModule,
     WalletListModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [
     {provide: LOCALE_ID, useValue: 'ru'},

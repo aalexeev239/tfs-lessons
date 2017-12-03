@@ -1,3 +1,10 @@
-<div class="container">
-    <tfs-wallet-list></tfs-wallet-list>
+<div class="layout">
+  <div class="layout__side">
+    <tfs-sidebar></tfs-sidebar>
+  </div>
+  <div class="layout__main">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>

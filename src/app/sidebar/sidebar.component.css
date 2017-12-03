@@ -1,0 +1,46 @@
+.main-list,
+.sub-list {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.main-item {
+  display: block;
+  border-bottom: 1px solid #dadada;
+}
+
+.sub-item {
+  display: block;
+}
+
+.main-link {
+  display: block;
+  padding: 10px;
+  color: #434343;
+  font-size: 16px;
+  text-decoration: none !important;
+  transition: all .2s;
+}
+
+.main-link:hover {
+  background: #434343;
+  color: #ffffff;
+}
+
+.main-link.active {
+  background: #dadada;
+  color: #434343;
+}
+
+.sub-link {
+  display: block;
+  padding: 5px;
+  padding-left: 30px;
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #434343;
+}
