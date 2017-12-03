@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {User} from './model/user';
 import {Login} from './model/login';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class AuthService {
-  private user$ = new ReplaySubject<User>(1);
+  private user$ = new BehaviorSubject<User>(null);
   redirectUrl: string;
 
   constructor(private router: Router,

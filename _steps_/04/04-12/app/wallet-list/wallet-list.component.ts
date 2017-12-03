@@ -19,9 +19,4 @@ export class WalletListComponent implements OnInit {
   ngOnInit() {
     this.asyncWallets = this.walletFireService.getWallets();
   }
-
-  addWallet() {
-    this.walletFireService.addWallet()
-      .subscribe();
-  }
 }

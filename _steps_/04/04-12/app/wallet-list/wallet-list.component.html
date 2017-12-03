@@ -6,9 +6,3 @@
     <tfs-wallet [wallet]="wallet"></tfs-wallet>
   </div>
 </div>
-
-<p *ngIf="!(asyncWallets | async)?.length" class="empty">
-  <em>Кошельков нет. <br>
-    <button type="button" class="btn btn-link" (click)="addWallet()">Создать</button>
-  </em>
-</p>
