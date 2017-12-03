@@ -46,6 +46,18 @@ export class AuthService {
     });
   }
 
+  signUp({email, password}: Login): Observable<any> {
+    return Observable.fromPromise(
+      this.firebaseAuth
+        .auth
+        .createUserWithEmailAndPassword(email, password)
+    ).do(() => {
+      const url = this.redirectUrl || '/';
+
+      this.router.navigate([url]);
+    });
+  }
+
   logout() {
     this.firebaseAuth
       .auth

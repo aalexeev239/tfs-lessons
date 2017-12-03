@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
+import {Login} from '../model/login';
 
 const DEFAULT_ERROR = 'Произошла ошибка входа. Попробуйте позже.';
 const AUTH_ERROR_CODE = 'auth/wrong-password';
@@ -35,6 +37,14 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
+    this.handleAuth(this.authService.login.bind(this.authService));
+  }
+
+  signUp() {
+    this.handleAuth(this.authService.signUp.bind(this.authService));
+  }
+
+  private handleAuth(method: (data: Login) => Observable<any>) {
     if (this.form.invalid) {
       return;
     }
@@ -42,26 +52,34 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
     const {email, password} = this.form.value;
 
-    this.authService.login({email, password})
+    method({email, password})
       .subscribe((result) => {
           this.clearForm();
         },
         (error) => {
           this.handleLoginError(error);
         });
+
   }
 
-  handleLoginError(error: any) {
+  private handleLoginError(error: any) {
     let errorMessage = errorMessages.DEFAULT;
 
-    if (error && error.code === AUTH_ERROR_CODE) {
-      errorMessage = errorMessages.AUTH_ERROR_CODE;
+    if (error) {
+      if (error.message) {
+        errorMessage = error.message;
+      }
+
+      if (error.code === AUTH_ERROR_CODE) {
+        errorMessage = errorMessages.AUTH_ERROR_CODE;
+      }
     }
+
 
     this.errorMessage = errorMessage;
   }
 
-  clearForm() {
+  private clearForm() {
     this.form.setValue({
       email: '',
       password: ''
