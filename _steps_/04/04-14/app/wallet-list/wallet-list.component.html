@@ -1,0 +1,14 @@
+<div class="row">
+  <!--<div class="col-md-6" *ngFor="let wallet of wallets">-->
+  <!--<tfs-wallet [wallet]="wallet"></tfs-wallet>-->
+  <!--</div>-->
+  <div class="col-md-6" *ngFor="let wallet of (asyncWallets | async)">
+    <tfs-wallet [wallet]="wallet"></tfs-wallet>
+  </div>
+</div>
+
+<p *ngIf="!(asyncWallets | async)?.length" class="empty">
+  <em>Кошельков нет. <br>
+    <button type="button" class="btn btn-link" (click)="addWallet()">Создать</button>
+  </em>
+</p>
