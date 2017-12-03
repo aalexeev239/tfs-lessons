@@ -5,10 +5,13 @@ import {WalletModule} from './wallet.module';
 import {PageObject} from '../../utils/pageObject';
 import {DebugElement} from '@angular/core';
 import {Purchase} from '../model/purchase';
+import {WalletHttpService} from './wallet-http.service';
 import createSpyObj = jasmine.createSpyObj;
 import {Observable} from 'rxjs/Observable';
 import {getPurchaseMock} from '../model/purchase.mock';
+import {WalletFireService} from '../wallet-list/wallet-fire.service';
 import {PurchasesService} from './purchases.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 const walletMock = {
   id: 'foo',
@@ -73,12 +76,34 @@ describe('WalletComponent | компонент кошелька', () => {
 
   beforeEach(async(() => {
     purchasesServiceSpy = createSpyObj('PurchasesService', ['getPurchasesForWallet', 'addPurchase', 'deletePurchase', 'editPurchase']);
+
     TestBed.configureTestingModule({
       imports: [WalletModule],
       providers: [
         {
           provide: PurchasesService,
           useValue: purchasesServiceSpy
+        },
+        {
+          provide: WalletFireService,
+          useValue: {
+            getWallet: () => Observable.of(Object.assign({}, walletMock)),
+            updateWallet: () => Observable.of(null)
+          }
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: Observable.of({
+              get: () => 'foo'
+            })
+          }
+        },
+        {
+          provide: Router,
+          useValue: {
+            navigate: () => null
+          }
         }
       ]
     })
@@ -273,10 +298,6 @@ describe('WalletComponent | компонент кошелька', () => {
 
       expect(id).toBe('bar');
     });
-
-    it('не вызывает метод загрузки всех покупок', () => {
-      expect(purchasesServiceSpy.getPurchasesForWallet).not.toHaveBeenCalledTimes(1);
-    });
   });
 
   describe('onPurchaseEdit', () => {
@@ -294,10 +315,6 @@ describe('WalletComponent | компонент кошелька', () => {
       const [purchase] = purchasesServiceSpy.editPurchase.calls.mostRecent().args;
 
       expect(purchase).toEqual(getPurchaseMock());
-    });
-
-    it('не вызывает метод загрузки всех покупок', () => {
-      expect(purchasesServiceSpy.getPurchasesForWallet).not.toHaveBeenCalledTimes(1);
     });
   });
 });

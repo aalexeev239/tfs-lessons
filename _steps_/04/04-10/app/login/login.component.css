@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  padding: 20px 0;
+}
+
+.title {
+  margin: 20px 0;
+}
+
+.form-control.ng-invalid.ng-touched {
+  border-color: #dc3545;
+}

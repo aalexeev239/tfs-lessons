@@ -1,0 +1,23 @@
+<nav>
+  <ul class="main-list">
+    <li class="main-item">
+      <a href="#"
+         routerLink="/"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
+         class="main-link">Интро</a>
+    </li>
+    <li class="main-item">
+      <a href="#" routerLink="/wallets" routerLinkActive="active" class="main-link">Мои кошельки</a>
+
+      <ul class="sub-list">
+
+        <li *ngFor="let wallet of (wallets | async)" class="sub-item">
+          <a href="#"
+             [routerLink]="'/wallets/' + wallet.id"
+             class="sub-link">{{wallet.name}}</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>

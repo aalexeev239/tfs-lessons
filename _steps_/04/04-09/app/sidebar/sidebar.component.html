@@ -1,0 +1,36 @@
+<nav>
+  <p class="user">{{(user$ | async)?.email}}</p>
+  <ul class="main-list">
+    <li class="main-item">
+      <a href="#"
+         routerLink="/"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}"
+         class="main-link">Интро</a>
+    </li>
+    <li class="main-item">
+      <a href="#" routerLink="/wallets" routerLinkActive="active" class="main-link">Мои кошельки</a>
+
+      <ul class="sub-list">
+
+        <li *ngFor="let wallet of (wallets | async)" class="sub-item">
+          <a href="#"
+             [routerLink]="'/wallets/' + wallet.id"
+             routerLinkActive="active"
+             class="sub-link">{{wallet.name}}</a>
+        </li>
+      </ul>
+    </li>
+    <li class="main-item">
+      <a href="#"
+         routerLink="/login"
+         routerLinkActive="active"
+         class="main-link">Войти</a>
+    </li>
+    <li class="main-item">
+      <a
+        (click)="logout()"
+        class="main-link">Выход</a>
+    </li>
+  </ul>
+</nav>

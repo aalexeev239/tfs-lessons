@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "test:ci": "ng lint && ng test --single-run",
-    "populate-db": "./node_modules/.bin/ts-node ./src/utils/populate-db.ts"
+    "populate-db": "./node_modules/.bin/ts-node ./src/utils/populate-db.ts",
+    "reset-db": "./node_modules/.bin/ts-node ./src/utils/reset-db.ts"
   },
   "private": true,
   "dependencies": {
